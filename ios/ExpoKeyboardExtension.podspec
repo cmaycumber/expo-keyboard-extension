@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.homepage       = package['homepage']
   s.platform       = :ios, '13.0'
   s.swift_version  = '5.4'
-  s.source         = { git: 'https://github.com/MaxAst/expo-keyboard-extension' }
+  s.source         = { git: 'https://github.com/cmaycumber/expo-keyboard-extension' }
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'

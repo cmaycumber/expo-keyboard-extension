@@ -9,16 +9,7 @@ export default function KeyboardExtension({ url }: { url: string }) {
       <Text
         style={{ fontFamily: "Inter-Black", fontSize: 24, marginBottom: 10 }}
       >
-        Basic Example Custom Keyboard
-      </Text>
-      <Text
-        style={{
-          textAlign: "center",
-          color: "#fff",
-          fontSize: 16,
-        }}
-      >
-        URL: {url}
+        Changes? 
       </Text>
     </View>
   );

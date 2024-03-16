@@ -25,14 +25,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MaxAst/expo-keyboard-extension.git"
+    "url": "git+https://github.com/cmaycumber/expo-keyboard-extension.git"
   },
   "bugs": {
-    "url": "https://github.com/MaxAst/expo-keyboard-extension/issues"
+    "url": "https://github.com/cmaycumber/expo-keyboard-extension/issues"
   },
   "author": "Max Ast (https://github.com/MaxAst)",
   "license": "MIT",
-  "homepage": "https://github.com/MaxAst/expo-keyboard-extension#readme",
+  "homepage": "https://github.com/cmaycumber/expo-keyboard-extension#readme",
   "dependencies": {
     "zod": "^3.22.4"
   },

@@ -9,7 +9,7 @@ Create an [iOS share extension](https://developer.apple.com/library/archive/docu
 
 **Note**: The extension currently only works for Safari's share menu, where a `url` prop is passed to the extension's root component as an initial prop. Contributions to support more [NSExtensionActivationRules](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/AppExtensionKeys.html#//apple_ref/doc/uid/TP40014212-SW10) are welcome!
 
-https://github.com/MaxAst/expo-keyboard-extension/assets/13224092/e5a6fb3d-6c85-4571-99c8-4efe0f862266
+https://github.com/cmaycumber/expo-keyboard-extension/assets/13224092/e5a6fb3d-6c85-4571-99c8-4efe0f862266
 
 ## Installation
 
