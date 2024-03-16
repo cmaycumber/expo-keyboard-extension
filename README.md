@@ -1,15 +1,11 @@
-# Expo Share Extension
+# Expo Keyboard Extension
 
 ![npm](https://img.shields.io/npm/v/expo-keyboard-extension.svg)
 ![License](https://img.shields.io/npm/l/expo-keyboard-extension.svg)
 ![Downloads](https://img.shields.io/npm/dm/expo-keyboard-extension.svg)
-![GitHub stars](https://img.shields.io/github/stars/MaxAst/expo-keyboard-extension.svg)
+![GitHub stars](https://img.shields.io/github/stars/cmaycumber/expo-keyboard-extension.svg)
 
-Create an [iOS share extension](https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/Share.html) with a custom view (similar to e.g. Pinterest). Supports Apple Sign-In, [React Native Firebase](https://rnfirebase.io/) (including shared auth session via access groups), custom background, custom height, and custom fonts.
-
-**Note**: The extension currently only works for Safari's share menu, where a `url` prop is passed to the extension's root component as an initial prop. Contributions to support more [NSExtensionActivationRules](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/AppExtensionKeys.html#//apple_ref/doc/uid/TP40014212-SW10) are welcome!
-
-https://github.com/cmaycumber/expo-keyboard-extension/assets/13224092/e5a6fb3d-6c85-4571-99c8-4efe0f862266
+Create an [iOS custom keyboard extension](https://developer.apple.com/documentation/uikit/keyboards_and_input/creating_a_custom_keyboard) with a custom view using Expo. Supports Apple Sign-In, [React Native Firebase](https://rnfirebase.io/) (including shared auth session via access groups), custom background, custom height, and custom fonts.
 
 ## Installation
 
@@ -55,27 +51,27 @@ or if you're using expo-router:
 import "expo-router/entry";
 ```
 
-Create an `index.share.js` in the root of your project
+Create an `index.keyboard.js` in the root of your project
 
 ```ts
 import { AppRegistry } from "react-native";
 
-// could be any component you want to use as the root component of your share extension's bundle
+// could be any component you want to use as the root component of your keyboard extension's bundle
 import KeyboardExtension from "./KeyboardExtension";
 
-// IMPORTANT: the first argument to registerComponent, must be "shareExtension"
-AppRegistry.registerComponent("shareExtension", () => KeyboardExtension);
+// IMPORTANT: the first argument to registerComponent, must be "keyboardExtension"
+AppRegistry.registerComponent("keyboardExtension", () => KeyboardExtension);
 ```
 
-Update metro.config.js so that it resolves index.share.js as the entry point for the share extension
+Update metro.config.js so that it resolves index.keyboard.js as the entry point for the keyboard extension
 
 ```js
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require("expo/metro-config");
 
 /**
- * Add support for share.js as a recognized extension to the Metro config.
- * This allows creating an index.share.js entry point for our iOS share extension
+ * Add support for keyboard.js as a recognized extension to the Metro config.
+ * This allows creating an index.keyboard.js entry point for our iOS keyboard extension
  *
  * @param {import('expo/metro-config').MetroConfig} config
  * @returns {import('expo/metro-config').MetroConfig}
@@ -83,7 +79,7 @@ const { getDefaultConfig } = require("expo/metro-config");
 function withKeyboardExtension(config) {
   config.transformer.getTransformOptions = () => ({
     resolver: {
-      sourceExts: [...config.resolver.sourceExts, "share.js"], // Add 'share.js' as a recognized extension
+      sourceExts: [...config.resolver.sourceExts, "keyboard.js"], // Add 'keyboard.js' as a recognized extension
     },
   });
   return config;
@@ -95,17 +91,16 @@ module.exports = withKeyboardExtension(getDefaultConfig(__dirname), {
 });
 ```
 
-Need a way to close the share extension? Use the `close` method from `expo-keyboard-extension`:
+Need a way to close the keyboard extension? Use the `close` method from `expo-keyboard-extension`:
 
 ```ts
 import { close } from "expo-keyboard-extension";
 import { Button, Text, View } from "react-native";
 
-// if KeyboardExtension is your root component, url is available as an initial prop
-export default function KeyboardExtension({ url }: { url: string }) {
+export default function KeyboardExtension() {
   return (
     <View style={{ flex: 1 }}>
-      <Text>{url}</Text>
+      <Text>Custom Keyboard</Text>
       <Button title="Close" onPress={close} />
     </View>
   );
@@ -116,7 +111,7 @@ export default function KeyboardExtension({ url }: { url: string }) {
 
 ### Exlude Expo Modules
 
-Exclude unneeded expo modules to reduce the share extension's bundle size by adding the following to your `app.json`/`app.config.(j|t)s`:
+Exclude unneeded expo modules to reduce the keyboard extension's bundle size by adding the following to your `app.json`/`app.config.(j|t)s`:
 
 ```json
 [
@@ -134,7 +129,7 @@ Exclude unneeded expo modules to reduce the share extension's bundle size by add
 
 ### React Native Firebase
 
-Using [React Native Firebase](https://rnfirebase.io/)? Given that share extensions are separate iOS targets, they have their own bundle IDs, so we need to create a _dedicated_ GoogleService-Info.plist in the Firebase console, just for the share extension target. The bundle ID of your share extension is your existing bundle ID with `.KeyboardExtension` as the suffix, e.g. `com.example.app.KeyboardExtension`.
+Using [React Native Firebase](https://rnfirebase.io/)? Given that keyboard extensions are separate iOS targets, they have their own bundle IDs, so we need to create a _dedicated_ GoogleService-Info.plist in the Firebase console, just for the keyboard extension target. The bundle ID of your keyboard extension is your existing bundle ID with `.KeyboardExtension` as the suffix, e.g. `com.example.app.KeyboardExtension`.
 
 ```json
 [
@@ -145,11 +140,11 @@ Using [React Native Firebase](https://rnfirebase.io/)? Given that share extensio
 ],
 ```
 
-You can share a firebase auth session between your main app and the share extension by using the [`useUserAccessGroup` hook](https://rnfirebase.io/reference/auth#useUserAccessGroup). The value for `userAccessGroup` is your main app's bundle ID with the `group.` prefix, e.g. `group.com.example.app`. For a full example, check [this](examples/with-firebase/README.md).
+You can share a firebase auth session between your main app and the keyboard extension by using the [`useUserAccessGroup` hook](https://rnfirebase.io/reference/auth#useUserAccessGroup). The value for `userAccessGroup` is your main app's bundle ID with the `group.` prefix, e.g. `group.com.example.app`.
 
 ### Custom Background Color
 
-Want to customize the share extension's background color? Add the following to your `app.json`/`app.config.(j|t)s`:
+Want to customize the keyboard extension's background color? Add the following to your `app.json`/`app.config.(j|t)s`:
 
 ```json
 [
@@ -167,70 +162,22 @@ Want to customize the share extension's background color? Add the following to y
 
 ### Custom Height
 
-Want to customize the share extension's height? Do this in your `app.json`/`app.config.(j|t)s`:
+Want to customize the keyboard extension's height? Do this in your `app.json`/`app.config.(j|t)s`:
 
 ```json
 [
   "expo-keyboard-extension",
     {
-      "height": 500
+      "height": 300
     },
 ],
 ```
 
 ### Custom Fonts
 
-This plugin automatically adds custom fonts to the share extension target if they are [embedded in the native project](https://docs.expo.dev/develop/user-interface/fonts/#embed-font-in-a-native-project) via the `expo-font` config plugin.
+This plugin automatically adds custom fonts to the keyboard extension target if they are [embedded in the native project](https://docs.expo.dev/develop/user-interface/fonts/#embed-font-in-a-native-project) via the `expo-font` config plugin.
 
-It currently does not support custom fonts that are [loaded at runtime](https://docs.expo.dev/develop/user-interface/fonts/#load-font-at-runtime), due to an `NSURLSesssion` [error](https://stackoverflow.com/questions/26172783/upload-nsurlsesssion-becomes-invalidated-in-sharing-extension-in-ios8-with-error). To fix this, Expo would need to support defining a [`sharedContainerIdentifier`](https://developer.apple.com/documentation/foundation/nsurlsessionconfiguration/1409450-sharedcontaineridentifier) for `NSURLSessionConfiguration` instances, where the value would be set to the main app's and share extension's app group identifier (e.g. `group.com.example.app`).
-
-### Preprocessing JavaScript
-
-As explained in [Accessing a Webpage](https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW12), we can use a JavaScript file to preprocess the webpage before the share extension is activated. This is useful if you want to extract the title and URL of the webpage, for example. To use this feature, add the following to your `app.json`/`app.config.(j|t)s`:
-
-```json
-[
-  "expo-keyboard-extension",
-    {
-      "preprocessingFile": "./preprocessing.js"
-    },
-],
-```
-
-The `preprocessingFile` option adds [`NSExtensionActivationSupportsWebPageWithMaxCount: 1`](https://developer.apple.com/documentation/bundleresources/information_property_list/nsextension/nsextensionattributes/nsextensionactivationrule/nsextensionactivationsupportswebpagewithmaxcount) as an `NSExtensionActivationRule`. Your preprocessing file must adhere to some rules:
-
-1. You must create a class with a `run` method, which receives an object with a `completionFunction` method as its argument. This `completionFunction` method must be invoked at the end of your `run` method. The argument you pass to it, is what you will receive as the `preprocessingResults` object as part of initial props.
-
-```javascript
-class KeyboardExtensionPreprocessor {
-  run(args) {
-    args.completionFunction({
-      title: document.title,
-    });
-  }
-}
-```
-
-2. Your file must create an instance of a class using `var`, so that it is globally accessible.
-
-```javascript
-var ExtensionPreprocessingJS = new KeyboardExtensionPreprocessor();
-```
-
-For a full example, check [this](examples/with-preprocessing/README.md).
-
-**WARNING:** Using this option enbales [`NSExtensionActivationSupportsWebPageWithMaxCount: 1`](https://developer.apple.com/documentation/bundleresources/information_property_list/nsextension/nsextensionattributes/nsextensionactivationrule/nsextensionactivationsupportswebpagewithmaxcount) and this is mutually exclusive with [`NSExtensionActivationSupportsWebURLWithMaxCount: 1`](https://developer.apple.com/documentation/bundleresources/information_property_list/nsextension/nsextensionattributes/nsextensionactivationrule/nsextensionactivationsupportsweburlwithmaxcount), which `expo-keyboard-extension` enables by default. This means that once you set the `preprocessingFile` option, you will no longer receive `url` as part of initial props. However, you can still get the URL via `preprocessingResults` by using `window.location.href` in your preprocessing file:
-
-```javascript
-class KeyboardExtensionPreprocessor {
-  run(args) {
-    args.completionFunction({
-      url: window.location.href,
-      title: document.title,
-    });
-  }
-}
-```
+It currently does not support custom fonts that are [loaded at runtime](https://docs.expo.dev/develop/user-interface/fonts/#load-font-at-runtime), due to an `NSURLSesssion` [error](https://stackoverflow.com/questions/26172783/upload-nsurlsesssion-becomes-invalidated-in-sharing-extension-in-ios8-with-error). To fix this, Expo would need to support defining a [`sharedContainerIdentifier`](https://developer.apple.com/documentation/foundation/nsurlsessionconfiguration/1409450-sharedcontaineridentifier) for `NSURLSessionConfiguration` instances, where the value would be set to the main app's and keyboard extension's app group identifier (e.g. `group.com.example.app`).
 
 ## Development
 
@@ -253,37 +200,28 @@ If you want to contribute to this project, you can use the example app to test y
 1. `pod cache clean --all`
 2. `pod deintegrate`
 
-#### Attach Debugger to Share Extension Process:
+#### Attach Debugger to Keyboard Extension Process:
 
 1. In XCode in the top menu, navigate to Debug > Attach to Process.
-2. In the submenu, you should see a list of running processes. Find your share extension's name in this list. If you don't see it, you can try typing its name into the search box at the bottom.
-3. Once you've located your share extension's process, click on it to attach the debugger to that process.
-4. With the debugger attached, you can also set breakpoints within your share extension's code. If these breakpoints are hit, Xcode will pause execution and allow you to inspect variables and step through your code, just like you would with your main app.
+2. In the submenu, you should see a list of running processes. Find your keyboard extension's name in this list. If you don't see it, you can try typing its name into the search box at the bottom.
+3. Once you've located your keyboard extension's process, click on it to attach the debugger to that process.
+4. With the debugger attached, you can also set breakpoints within your keyboard extension's code. If these breakpoints are hit, Xcode will pause execution and allow you to inspect variables and step through your code, just like you would with your main app.
 
 #### Check Device Logs
 
 1. Open the Console app from the Applications/Utilities folder
 2. Select your device from the Devices list
-3. Filter the log messages by process name matching your share extension target name
+3. Filter the log messages by process name matching your keyboard extension target name
 
 #### Check Crash Logs
 
 1. On your Mac, open Finder.
 2. Select Go > Go to Folder from the menu bar or press Shift + Cmd + G.
 3. Enter ~/Library/Logs/DiagnosticReports/ and click Go.
-4. Look for any recent crash logs related to your share extension. These logs should have a .crash or .ips extension.
+4. Look for any recent crash logs related to your keyboard extension. These logs should have a .crash or .ips extension.
 
 ## Credits
 
 This project would not be possible without existing work in the react native ecosystem. I'd like to give credit to the following projects and their authors:
 
-- https://github.com/Expensify/react-native-share-menu
-- https://github.com/andrewsardone/react-native-ios-share-extension
-- https://github.com/alinz/react-native-share-extension
-- https://github.com/ajith-ab/react-native-receive-sharing-intent
-- https://github.com/timedtext/expo-config-plugin-ios-share-extension
-- https://github.com/achorein/expo-share-intent-demo
-- https://github.com/andrewsardone/react-native-ios-share-extension
-- https://github.com/EvanBacon/pillar-valley/tree/master/targets/widgets
-- https://github.com/andrew-levy/react-native-safari-extension
-- https://github.com/bndkt/react-native-app-clip
+- https://github.com/MaxAst/expo-share-extension
