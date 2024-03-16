@@ -1,6 +1,6 @@
 {
   "name": "expo-keyboard-extension",
-  "version": "1.4.0",
+  "version": "0.0.1",
   "description": "Expo config plugin to create an iOS share extension.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
