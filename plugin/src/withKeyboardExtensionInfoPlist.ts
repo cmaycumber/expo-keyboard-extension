@@ -9,7 +9,6 @@ import {
   getKeyboardExtensionName,
 } from "./index";
 
-
 export const withKeyboardExtensionInfoPlist: ConfigPlugin<{
   fonts: string[];
   backgroundColor?: BackgroundColor;
@@ -62,9 +61,10 @@ export const withKeyboardExtensionInfoPlist: ConfigPlugin<{
           IsASCIICapable: false,
           PrefersRightToLeft: false,
           PrimaryLanguage: "en-US",
-          RequestsOpenAccess: false,
+          RequestsOpenAccess: true,
         },
-        NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).KeyboardViewController",
+        NSExtensionPrincipalClass:
+          "$(PRODUCT_MODULE_NAME).KeyboardViewController",
         NSExtensionPointIdentifier: "com.apple.keyboard-service",
       },
       KeyboardExtensionBackgroundColor: backgroundColor,

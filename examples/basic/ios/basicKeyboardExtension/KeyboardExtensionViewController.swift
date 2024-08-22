@@ -1,5 +1,6 @@
 import UIKit
 import React
+import SwiftUI
 
 class KeyboardViewController: UIInputViewController {
   
@@ -66,6 +67,11 @@ class KeyboardViewController: UIInputViewController {
         self?.close()
       }
     }
+    NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "addKey"), object: nil, queue: nil) { notification in
+        if let text = notification.object as? String {
+            self.textDocumentProxy.insertText(text)
+        }
+    }
   }
   
   private func cleanupAfterClose() {
@@ -93,7 +99,8 @@ class KeyboardViewController: UIInputViewController {
       height: withHeight ?? self.view.bounds.height
     )
     rootView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    self.view.addSubview(rootView)
+
+    view.addKeyboardSubview(rootView, withHeight: withHeight ?? self.view.bounds.height)
   }
   
   private func jsCodeLocation() -> URL? {
@@ -111,5 +118,25 @@ class KeyboardViewController: UIInputViewController {
     let blue = dict["blue"] ?? 255.0
     let alpha = dict["alpha"] ?? 1
     return UIColor(red: red / 255.0, green: green / 255.0, blue: blue / 255.0, alpha: alpha)
+  }
+}
+
+
+extension UIView {
+  func addKeyboardSubview(_ subview: UIView, withHeight: CGFloat) {
+    subview.translatesAutoresizingMaskIntoConstraints = false
+      
+      subview.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+      subview.backgroundColor = UIColor.systemBlue
+             
+   
+    addSubview(subview)
+    NSLayoutConstraint.activate([
+      subview.leftAnchor.constraint(equalTo: leftAnchor),
+      subview.rightAnchor.constraint(equalTo: rightAnchor),
+      subview.topAnchor.constraint(equalTo: topAnchor),
+      subview.bottomAnchor.constraint(equalTo: bottomAnchor),
+      subview.heightAnchor.constraint(equalToConstant: withHeight) 
+    ])
   }
 }
